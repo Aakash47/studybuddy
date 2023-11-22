@@ -1,0 +1,20 @@
+{% extends 'user/main_nav.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Login{% endblock %}
+{% block main %}
+<div class="conatiner ms-5">
+    <img src="{% static 'img/login.jpg' %}" alt="" srcset="">
+</div>
+<form action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+    <div class="position-absolute top-50 start-50 translate-middle-y mt-5">
+        <h3>Register</h3>
+        <div class="form-group row w-75 p-4  border border-dark rounded">
+            {{form|crispy}}
+            <span>Already have a account? <a href="{% url 'login' %}">Login</a></span>
+            <button type="submit" class="btn btn-primary mt-2">Register</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
