@@ -2,6 +2,13 @@
 {% load static %}
 {% block title %}Login{% endblock %}
 {% block main %}
+{% if messages %}
+{% for message in messages %}
+<div class="messages">
+    <p class="alert {{message.tags}} m-3">{{message}}</p>
+</div>
+{% endfor %}
+{% endif%}
 <div class="conatiner ms-5">
     <img src="{% static 'img/login.jpg' %}" alt="" srcset="">
 </div>
@@ -11,10 +18,12 @@
         <h3>Login</h3>
         <div class="form-group row w-75 p-4  border border-dark rounded">
             <label for="exampleInputEmail1">Username</label>
-            <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter username">
+            <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp"
+                placeholder="Enter username">
 
             <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
+            <input type="password" class="form-control" name="password" id="exampleInputPassword1"
+                placeholder="Password">
             <span>Don't have an account? <a href="{% url 'register' %}">Register</a></span>
             <button type="submit" class="btn btn-primary mt-2">Login</button>
         </div>

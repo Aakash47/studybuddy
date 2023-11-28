@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from user import forms as user_form
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 # Create your views here.
 
 @login_required(login_url='login')
@@ -17,9 +18,16 @@ def registeruser(request):
     if request.method=="POST":
         form = user_form.CreateUserForm(request.POST)
         if form.is_valid():
+            form.email = form.cleaned_data.get('email')
             form.save()
-            messages.success(request, f"Account has been Created for {form.cleaned_data.get('username')}")
+            messages.success(request, f"Account has been Created for {form.cleaned_data.get('first_name')}")
             return redirect('home')
+        else:
+            context={
+                "form":form
+            }
+            return render(request, "user/register.html", context=context)
+            
     context={
         "form":form
     }
@@ -39,7 +47,7 @@ def loginuser(request):
             login(request, user)
             return redirect('home')
         else:
-            messages.error=(request, "Username or password is incorrect")
+            messages.error(request, "Username or password is incorrect")
     
     return render(request, "user/login.html")
 
