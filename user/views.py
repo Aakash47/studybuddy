@@ -6,9 +6,8 @@ from django.contrib import messages
 from user import models as user_model
 # Create your views here.
 
-@login_required(login_url='login')
 def home(request):
-    return HttpResponse("hello world")
+    return render(request, "user/home.html")
 
 def registeruser(request):
     if request.user.is_authenticated:
@@ -68,6 +67,7 @@ def addcollege(request):
         except  Exception as e:
             if form.is_valid:
                 form.college = request.POST.get('college').upper()
+                form.is_approved = True
                 form.save()
                 messages.success(request, "College added successfully")
 
@@ -91,6 +91,7 @@ def addcourse(request):
             print(e)
             if form.is_valid:
                 form.college = request.POST.get('course').upper()
+                form.is_approved = True
                 form.save()
                 messages.success(request, "Course added successfully")
 

@@ -9,8 +9,8 @@
 </div>
 {% endfor %}
 {% endif%}
-    <div class="conatiner ms-5">
-        <img src="{% static 'img/login.jpg' %}" alt="" height="95%" width="">
+    <div class="conatiner mt-5 ms-5">
+        <img class="mt-3 ms-5" src="{% static 'img/login.jpg' %}" alt="" height="95%" width="">
     </div>
     <form action="{% url 'register' %}" method="post" novalidate>
         {% csrf_token %}
