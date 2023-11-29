@@ -12,11 +12,11 @@ class Room(models.Model):
     rimage = models.ImageField(upload_to="images/", null=True, blank=True)
     ruser = models.ManyToManyField(User, related_name="ruser", blank=True)
     rname = models.CharField(max_length=100)
-    rdescriprtion = models.TextField()
+    rdescription = models.TextField()
     rcourse = models.ManyToManyField(user_model.Usercourse, related_name="rcourse")
     rcollege = models.ManyToManyField(user_model.Usercollege, related_name="rcollege")
-    rcreated_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="rcreatedby")
-    rcreated_on = models.DateTimeField()
+    rcreated_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="rcreatedby", blank=True, null=True)
+    rcreated_on = models.DateTimeField(auto_now=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.rslug:
