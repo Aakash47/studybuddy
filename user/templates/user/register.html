@@ -1,10 +1,16 @@
 {% extends 'user/main_nav.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
 {% block title %}Register{% endblock %}
 {% block main %}
+{% if messages %}
+{% for message in messages %}
+<div class="messages">
+    <p class="alert {{message.tags}} m-3">{{message}}</p>
+</div>
+{% endfor %}
+{% endif%}
     <div class="conatiner ms-5">
-        <img src="{% static 'img/login.jpg' %}" alt="" srcset="">
+        <img src="{% static 'img/login.jpg' %}" alt="" height="95%" width="">
     </div>
     <form action="{% url 'register' %}" method="post" novalidate>
         {% csrf_token %}
@@ -32,9 +38,17 @@
                 <label for="password2">Re-Enter Password *</label>
                 <input type="password" class="form-control" name="password2" required>
                 <label for="ucourse">Enter your Course *</label>
-                <input type="text" class="form-control" name="ucourse" required>
+                <select name="ucourse" id="ucourse" class="form-select">
+                    {% for course in courses %}
+                        <option value="{{course.id}}">{{course}}</option>
+                    {% endfor %}
+                </select>
                 <label for="ucollege">Enter your college *</label>
-                <input type="text" class="form-control" name="ucollege" required>
+                <select name="ucollege" id="ucollege" class="form-select">
+                    {% for college in colleges %}
+                        <option value="{{college.id}}">{{college}}</option>
+                    {% endfor %}
+                </select>
                 {% if form.errors %}
                     {% for field in form %}
                         {% for error in field.errors %}
@@ -42,6 +56,7 @@
                         {% endfor %}
                     {% endfor %}
                 {% endif %}
+                <span>Couldn't find your <a href="{% url 'addcollege' %}">College</a> or <a href="{% url 'addcourse' %}">Course</a></span>
                 <span>Already have a account? <a href="{% url 'login' %}">Login</a></span>
                 <button type="submit" class="btn btn-primary mt-2">Register</button>
             </div>

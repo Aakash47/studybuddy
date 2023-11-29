@@ -10,20 +10,20 @@
 {% endfor %}
 {% endif%}
 <div class="conatiner ms-5">
-    <img src="{% static 'img/login.jpg' %}" alt="" srcset="">
+    <img src="{% static 'img/login.jpg' %}" alt="" height="" width="">
 </div>
 <form action="{% url 'login' %}" method="post">
     {% csrf_token %}
     <div class="position-absolute top-50 start-50 translate-middle-y">
         <h3>Login</h3>
         <div class="form-group row w-75 p-4  border border-dark rounded">
-            <label for="exampleInputEmail1">Username</label>
+            <label for="exampleInputEmail1">Email</label>
             <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp"
-                placeholder="Enter username">
+                placeholder="Enter Email">
 
             <label for="exampleInputPassword1">Password</label>
             <input type="password" class="form-control" name="password" id="exampleInputPassword1"
-                placeholder="Password">
+                placeholder="Enter Password">
             <span>Don't have an account? <a href="{% url 'register' %}">Register</a></span>
             <button type="submit" class="btn btn-primary mt-2">Login</button>
         </div>

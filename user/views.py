@@ -3,6 +3,7 @@ from user import forms as user_form
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from user import models as user_model
 # Create your views here.
 
 @login_required(login_url='login')
@@ -14,22 +15,21 @@ def registeruser(request):
         return redirect('home')
 
     form = user_form.CreateUserForm()
+    college = user_model.Usercollege.objects.filter(is_approved=True)
+    course = user_model.Usercourse.objects.filter(is_approved=True)
 
     if request.method=="POST":
         form = user_form.CreateUserForm(request.POST)
         if form.is_valid():
-            form.email = form.cleaned_data.get('email')
+            form.email = form.cleaned_data.get('username')
             form.save()
-            messages.success(request, f"Account has been Created for {form.cleaned_data.get('first_name')}")
+            messages.success(request, f"Account has been Created for {form.cleaned_data.get('username')}")
             return redirect('home')
-        else:
-            context={
-                "form":form
-            }
-            return render(request, "user/register.html", context=context)
             
     context={
-        "form":form
+        "form":form,
+        "colleges":college,
+        "courses":course,
     }
     return render(request, "user/register.html", context=context)
 
@@ -54,3 +54,49 @@ def loginuser(request):
 def logoutuser(request):
     logout(request)
     return redirect('login')
+
+
+def addcollege(request):
+
+    form = user_form.Addcollegeform()
+
+    if request.method == "POST":
+        form = user_form.Addcollegeform(request.POST)
+        try:
+            user_model.Usercollege.objects.get(college=request.POST.get('college').upper())
+            messages.info(request, "College already exists.")
+        except  Exception as e:
+            if form.is_valid:
+                form.college = request.POST.get('college').upper()
+                form.save()
+                messages.success(request, "College added successfully")
+
+        return redirect('register')
+    context = {
+        'form':form
+    }
+
+    return render(request, "user/addcollege.html", context)
+
+def addcourse(request):
+
+    form = user_form.Addcourseform()
+
+    if request.method == "POST":
+        form = user_form.Addcourseform(request.POST)
+        try:
+            user_model.Usercourse.objects.get(course=request.POST.get('course').upper())
+            messages.info(request, "Course already exists.")
+        except  Exception as e:
+            print(e)
+            if form.is_valid:
+                form.college = request.POST.get('course').upper()
+                form.save()
+                messages.success(request, "Course added successfully")
+
+        return redirect('register')
+    context = {
+        'form':form
+    }
+
+    return render(request, "user/addcollege.html", context)

@@ -11,3 +11,15 @@ class CreateUserForm(UserCreationForm):
         help_texts = {
             'username':None,
         }
+
+class Addcollegeform(forms.ModelForm):
+
+    class Meta:
+        model = user_model.Usercollege
+        fields = ['college',]
+
+class Addcourseform(forms.ModelForm):
+
+    class Meta:
+        model = user_model.Usercourse
+        fields = ['course',]
