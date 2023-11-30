@@ -24,10 +24,10 @@ def CreateRoom(request):
     if request.method == "POST":
         form = room_form.CreateroomForm(request.POST, request.FILES)
         if form.is_valid():
-            print(request.user.id)
             form.instance.rcreated_by=request.user
             form.save()
-            return redirect('home')
+            form.instance.ruser.add(request.user)
+            return redirect('myroom')
 
     context = {
         'form':form
@@ -35,5 +35,27 @@ def CreateRoom(request):
 
     return render(request, 'chatroom/createroom.html', context)
 
-def chat(request):
-    return render(request, 'chatroom/chat.html')
+def joinroom(request, rslug):
+    try:
+        room = chatroom_model.Room.objects.get(rslug=rslug)
+        room.ruser.add(request.user)
+        return redirect('chat', room.rslug)
+    except Exception as e:
+        messaage.error(request, "Room not find")
+        return redirect('room')
+
+def joinedroom(request):
+
+    rooms = chatroom_model.Room.objects.filter(ruser=request.user)
+
+    context = {
+        'rooms':rooms
+    }
+    return render(request, 'chatroom/rooms.html', context)
+
+def chat(request, rslug):
+    room = chatroom_model.Room.objects.get(rslug=rslug)
+    context={
+        'room':room
+    }
+    return render(request, 'chatroom/chat.html', context)

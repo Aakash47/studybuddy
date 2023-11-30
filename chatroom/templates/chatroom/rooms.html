@@ -5,19 +5,34 @@
 {% block main %}
 <div class="conatiner" style="margin-top:6rem ;">
     <div class="row">
-        {% for room in rooms %}
-        <div class="col-sm-6">
-<div class="card m-5" style="width: 18rem;">
-    <img class="card-img-top" src="{{room.rimage.url}}" alt="Card image cap">
-    <div class="card-body">
-      <h5 class="card-title">{{room.rname}}</h5>
-      <p class="card-text"><Strong>admin:</Strong> {{room.rcreated_by}}</p>
-      <p class="card-text">{{room.rdescription}}</p>
-      <a href="{% url 'chat' %}" class="btn btn-primary">Join</a>
+      {% for room in rooms %}
+        <div class="col-sm-3">
+          <div class="card m-3" style="width: 18rem;">
+            {% if room.rimage %}
+              <img class="card-img-top" src="{{ room.rimage.url }}" alt="Card image cap">
+            {% else %}
+              <img class="card-img-top" src="{% static 'img/default.png' %}" alt="Card image cap">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ room.rname }}</h5>
+              <p class="card-text">
+                <strong>admin:</strong> 
+                {% if request.user == room.rcreated_by %}
+                 You
+                 {% else %}
+                {{ room.rcreated_by }}
+                {% endif %}
+              </p>
+              <p class="card-text">{{ room.rdescription }}</p>
+              {% if request.user in room.ruser.all %}
+              <a href="{% url 'chat' room.rslug %}" class="btn btn-primary">Chat</a>
+                {% else %}
+                <a href="{% url 'joinroom' room.rslug %}" class="btn btn-primary">Join</a>
+                {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
     </div>
   </div>
-</div>
-{% endfor %}
-</div>
-</div>
 {% endblock %}

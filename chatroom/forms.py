@@ -6,3 +6,15 @@ class CreateroomForm(forms.ModelForm):
     class Meta:
         model = chatroom_model.Room
         fields = ['rname','rimage','rdescription','rcourse', 'rcollege']
+        widgets = {
+            'rcourse':forms.CheckboxSelectMultiple,
+            'rcollege':forms.CheckboxSelectMultiple
+        }
+        labels = {
+            'rname':'Name',
+            'rimage':'Image',
+            'rdescription': 'Description',
+            'rcourse':'Course',
+            'rcollege':'college'
+
+        }

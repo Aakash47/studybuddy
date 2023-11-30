@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 
@@ -18,9 +18,9 @@ class Usercollege(models.Model):
     def __str__(self):
         return self.college
 
-class Userprofile(User):
-    ucourse = models.ForeignKey(Usercourse, on_delete=models.PROTECT)
-    ucollege = models.ForeignKey(Usercollege, on_delete=models.PROTECT)
+class User(AbstractUser):
+    ucourse = models.ForeignKey(Usercourse, on_delete=models.PROTECT,null=True, blank=True)
+    ucollege = models.ForeignKey(Usercollege, on_delete=models.PROTECT,null=True, blank=True)
 
     def __str__(self):
         return self.username

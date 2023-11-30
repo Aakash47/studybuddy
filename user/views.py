@@ -4,10 +4,20 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from user import models as user_model
+from chatroom import models as chatroom_model
+from django.db.models import Count
 # Create your views here.
 
 def home(request):
-    return render(request, "user/home.html")
+    collegerooms = chatroom_model.Room.objects.filter(rcollege=request.user.ucollege)[:3]
+    courserooms = chatroom_model.Room.objects.filter(rcourse=request.user.ucourse)[:3]
+    featuringrooms = chatroom_model.Room.objects.annotate(num_users=Count('ruser')).filter(num_users__gt=0)[:3]
+    context = {
+        'collegerooms':collegerooms,
+        'courserooms':courserooms,
+        'featuringrooms':featuringrooms,
+    }
+    return render(request, "user/home.html", context)
 
 def registeruser(request):
     if request.user.is_authenticated:

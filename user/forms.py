@@ -6,7 +6,7 @@ from . import models as user_model
 class CreateUserForm(UserCreationForm):
 
     class Meta:
-        model = user_model.Userprofile
+        model = user_model.User
         fields = ['first_name','last_name','email','username', "password1", "password2",'ucourse','ucollege']
         help_texts = {
             'username':None,

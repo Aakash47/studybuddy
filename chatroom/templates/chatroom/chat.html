@@ -1,7 +1,8 @@
 {% extends 'user/main_nav.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-{% block title %}Create Room{% endblock %}
+{% block title %}Chat {{room.rname}}{% endblock %}
 {% block main %}
-<h1>Chat</h1>
+<h1 class="mt-5">{{room.rname}}</h1>
+
 {% endblock %}
