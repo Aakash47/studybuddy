@@ -9,14 +9,19 @@ from django.db.models import Count
 # Create your views here.
 
 def home(request):
-    collegerooms = chatroom_model.Room.objects.filter(rcollege=request.user.ucollege)[:3]
-    courserooms = chatroom_model.Room.objects.filter(rcourse=request.user.ucourse)[:3]
     featuringrooms = chatroom_model.Room.objects.annotate(num_users=Count('ruser')).filter(num_users__gt=0)[:3]
-    context = {
-        'collegerooms':collegerooms,
-        'courserooms':courserooms,
-        'featuringrooms':featuringrooms,
-    }
+    if request.user.is_authenticated:
+        collegerooms = chatroom_model.Room.objects.filter(rcollege=request.user.ucollege)[:3]
+        courserooms = chatroom_model.Room.objects.filter(rcourse=request.user.ucourse)[:3]
+        context = {
+            'collegerooms':collegerooms,
+            'courserooms':courserooms,
+            'featuringrooms':featuringrooms,
+        }
+    else:
+        context = {
+            'featuringrooms':featuringrooms
+        }
     return render(request, "user/home.html", context)
 
 def registeruser(request):
@@ -75,9 +80,9 @@ def addcollege(request):
             user_model.Usercollege.objects.get(college=request.POST.get('college').upper())
             messages.info(request, "College already exists.")
         except  Exception as e:
-            if form.is_valid:
-                form.college = request.POST.get('college').upper()
-                form.is_approved = True
+            if form.is_valid():
+                form.instance.college = form.cleaned_data['college'].upper()
+                form.instance.is_approved = True
                 form.save()
                 messages.success(request, "College added successfully")
 
@@ -98,10 +103,9 @@ def addcourse(request):
             user_model.Usercourse.objects.get(course=request.POST.get('course').upper())
             messages.info(request, "Course already exists.")
         except  Exception as e:
-            print(e)
-            if form.is_valid:
-                form.college = request.POST.get('course').upper()
-                form.is_approved = True
+            if form.is_valid():
+                form.instance.course = form.cleaned_data['course'].upper()
+                form.instance.is_approved = True
                 form.save()
                 messages.success(request, "Course added successfully")
 

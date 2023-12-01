@@ -15,6 +15,6 @@ class CreateroomForm(forms.ModelForm):
             'rimage':'Image',
             'rdescription': 'Description',
             'rcourse':'Course',
-            'rcollege':'college'
+            'rcollege':'College'
 
         }

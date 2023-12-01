@@ -10,6 +10,7 @@
         <h3 class="pt-5">Create Room</h3>
         <div class="form-group row p-4  border border-dark rounded">
             {{form|crispy}}
+            <span>Couldn't find your <a href="{% url 'addcollege' %}">College</a> or <a href="{% url 'addcourse' %}">Course</a></span>
             <button type="submit" class="btn btn-primary mt-2">Create</button>
         </div>
     </div>
