@@ -1,7 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from user import forms as user_form
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from user import models as user_model
 from chatroom import models as chatroom_model

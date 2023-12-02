@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from chatroom import forms as room_form
 from chatroom import models as chatroom_model
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+@login_required(login_url='login')
 def MyRooms(request):
 
     rooms = chatroom_model.Room.objects.filter(rcreated_by=request.user)
@@ -18,6 +20,7 @@ def AllRooms(request):
     }
     return render(request, "chatroom/rooms.html", context)
 
+@login_required(login_url='login')
 def CreateRoom(request):
     form = room_form.CreateroomForm()
 
@@ -35,6 +38,7 @@ def CreateRoom(request):
 
     return render(request, 'chatroom/createroom.html', context)
 
+@login_required(login_url='login')
 def joinroom(request, rslug):
     try:
         room = chatroom_model.Room.objects.get(rslug=rslug)
@@ -44,6 +48,7 @@ def joinroom(request, rslug):
         messaage.error(request, "Room not find")
         return redirect('room')
 
+@login_required(login_url='login')
 def joinedroom(request):
 
     rooms = chatroom_model.Room.objects.filter(ruser=request.user)
@@ -53,6 +58,7 @@ def joinedroom(request):
     }
     return render(request, 'chatroom/rooms.html', context)
 
+@login_required(login_url='login')
 def chat(request, rslug):
     room = chatroom_model.Room.objects.get(rslug=rslug)
     context={
