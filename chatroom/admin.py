@@ -4,3 +4,4 @@ from chatroom import models as chatroom_model
 
 
 admin.site.register(chatroom_model.Room)
+admin.site.register(chatroom_model.Message)

@@ -61,7 +61,9 @@ def joinedroom(request):
 @login_required(login_url='login')
 def chat(request, rslug):
     room = chatroom_model.Room.objects.get(rslug=rslug)
+    messages = chatroom_model.Message.objects.filter(room=room)[0:10]
     context={
-        'room':room
+        'room':room,
+        'messages':messages
     }
     return render(request, 'chatroom/chat.html', context)

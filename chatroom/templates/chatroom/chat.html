@@ -16,20 +16,17 @@
                                          data-mdb-perfect-scrollbar="true"
                                          style="position: relative;
                                                 height: 400px">
-                                        <div class="d-flex flex-row justify-content-center">
+                                        <div class="d-flex flex-row justify-content-center" id="chat-messages">
+                                            {% for message in messages %}
                                             <div>
                                                 <p class="small p-2 ms-3 mb-1 rounded-3"
                                                    style="background-color: #f5f6f7">
-                                                    Lorem ipsum
-                                                    dolor
-                                                    sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                                                    dolore
-                                                    magna aliqua.
+                                                    {{message.content}}
                                                 </p>
-                                                <p class="small ms-3 mb-3 rounded-3 text-muted float-end">{{ room.rcreated_by }}</p>
+                                                <p class="small ms-3 mb-3 rounded-3 text-muted float-end">{{ message.user.first_name }}</p>
                                             </div>
+                                            {% endfor %}
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -41,9 +38,82 @@
                 <input type="text"
                        style="margin-left: 25px"
                        class="form-control form-control-lg"
-                       id="exampleFormControlInput2"
+                       id="chat-message-input"
                        placeholder="Type message">
-                <button class="btn btn-primary m-2" type="submit">Send</button>
+                <button class="btn btn-primary m-2" id="chat-message-submit">Send</button>
             </div>
         </section>
+    {% endblock %}
+    {% block main_scripts %}
+        {{ room.rslug|json_script:"json-roomname" }}
+        {{ request.user.username|json_script:"json-username" }}
+        <script>
+    const roomName = JSON.parse(document.getElementById('json-roomname').textContent);
+    const userName = JSON.parse(document.getElementById('json-username').textContent);
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/'
+        + roomName
+        + '/'
+    );
+
+    chatSocket.onclose = function(e) {
+        console.log('onclose')
+    }
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+
+        if (data.message) {
+            document.querySelector('#chat-messages').innerHTML += ('<b>' + data.username + '</b>: ' + data.message + '<br>');
+        } else {
+            alert('The message was empty!')
+        }
+
+        scrollToBottom();
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        e.preventDefault()
+
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+
+        console.log({
+            'message': message,
+            'username': userName,
+            'room': roomName
+        })
+
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'username': userName,
+            'room': roomName
+        }));
+
+        messageInputDom.value = '';
+
+        return false
+    };
+
+    /**
+    * A function for finding the messages element, and scroll to the bottom of it.
+    */
+    function scrollToBottom() {
+        let objDiv = document.getElementById("chat-messages");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+    // Add this below the function to trigger the scroll on load.
+    scrollToBottom();
+    
+        </script>
     {% endblock %}
