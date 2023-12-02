@@ -16,14 +16,10 @@
                                          data-mdb-perfect-scrollbar="true"
                                          style="position: relative;
                                                 height: 400px">
-                                        <div class="d-flex flex-row justify-content-center" id="chat-messages">
+                                        <div id="chat-messages">
                                             {% for message in messages %}
                                             <div>
-                                                <p class="small p-2 ms-3 mb-1 rounded-3"
-                                                   style="background-color: #f5f6f7">
-                                                    {{message.content}}
-                                                </p>
-                                                <p class="small ms-3 mb-3 rounded-3 text-muted float-end">{{ message.user.first_name }}</p>
+                                                <strong>{{message.user.username}}:</strong> {{message.content}} <br>
                                             </div>
                                             {% endfor %}
                                         </div>

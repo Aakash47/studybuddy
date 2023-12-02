@@ -34,10 +34,11 @@ def registeruser(request):
     if request.method=="POST":
         form = user_form.CreateUserForm(request.POST)
         if form.is_valid():
-            form.email = form.cleaned_data.get('username')
+            form.instance.email = form.cleaned_data.get('username')
+            form.instance.username = form.cleaned_data.get('username').split('@')[0]
             form.save()
             messages.success(request, f"Account has been Created for {form.cleaned_data.get('username')}")
-            return redirect('home')
+            return redirect('login')
             
     context={
         "form":form,
@@ -51,7 +52,7 @@ def loginuser(request):
         return redirect('home')
     
     if request.method=="POST":
-        username = request.POST.get('username')
+        username = request.POST.get('username').split('@')[0]
         password = request.POST.get('password')
 
         user = authenticate(request, username=username, password=password)
