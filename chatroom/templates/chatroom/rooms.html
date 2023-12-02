@@ -3,7 +3,11 @@
 {% load crispy_forms_tags %}
 {% block title %}Create Room{% endblock %}
 {% block main %}
-<div class="conatiner" style="margin-top:6rem ;">
+<div class="container" style="margin-top:6rem ;">
+  <form class="input-group m-3" action="{% url 'search' %}" method="get">
+    <input type="search"  class="form-control" name="q" placeholder="search">
+    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+  </form>
     <div class="row">
       {% for room in rooms %}
         <div class="col-sm-3">
@@ -18,11 +22,14 @@
               <p class="card-text">
                 <strong>admin:</strong> 
                 {% if request.user == room.rcreated_by %}
-                 You
+                 You,
                  {% else %}
-                {{ room.rcreated_by }}
+                {{ room.rcreated_by }},
                 {% endif %}
+                <strong>course:</strong>
+                {{ room.rcourse.all.0 }}, {{room.rcourse.all.1}} ...
               </p>
+              <p class="card-text"><Strong>college: </Strong>{{ room.rcollege.all.0 }}, {{room.rcollege.all.1}} ...</p>
               <p class="card-text">{{ room.rdescription }}</p>
               {% if request.user in room.ruser.all %}
               <a href="{% url 'chat' room.rslug %}" class="btn btn-primary">Chat</a>

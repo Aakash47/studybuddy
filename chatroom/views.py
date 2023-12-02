@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from chatroom import forms as room_form
 from chatroom import models as chatroom_model
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 # Create your views here.
 
 @login_required(login_url='login')
@@ -67,3 +68,11 @@ def chat(request, rslug):
         'messages':messages
     }
     return render(request, 'chatroom/chat.html', context)
+
+def rooomsearch(request):
+    query = request.GET.get('q')
+    rooms = chatroom_model.Room.objects.filter(Q(rname__icontains=query) | Q(rcollege__college__icontains=query) | Q(rcourse__course__icontains=query))
+    context = {
+        'rooms':rooms
+    }
+    return render(request, 'chatroom/rooms.html', context)
