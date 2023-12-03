@@ -36,7 +36,7 @@
     <h3>Featuring Groups</h3>
     <div class="row">
       {% for room in featuringrooms %}
-        <div class="col-sm-3">
+        <div class="col-sm-3 ms-5">
           <div class="card m-3" style="width: 18rem;">
             {% if room.rimage %}
               <img class="card-img-top" src="{{ room.rimage.url }}" alt="Card image cap">
@@ -69,10 +69,11 @@
   </div>
   {% if request.user.is_authenticated %}
     <div class="container">
+      {% if courserooms %}
       <h3>Groups based on your Course</h3>
       <div class="row">
         {% for room in courserooms %}
-          <div class="col-sm-3">
+          <div class="col-sm-3 ms-5">
             <div class="card m-3" style="width: 18rem;">
               {% if room.rimage %}
                 <img class="card-img-top" src="{{ room.rimage.url }}" alt="Card image cap">
@@ -102,12 +103,14 @@
           </div>
         {% endfor %}
       </div>
+      {% endif %}
     </div>
     <div class="container">
+      {% if collegerooms %}
       <h3>Groups based on your College</h3>
       <div class="row">
         {% for room in collegerooms %}
-          <div class="col-sm-3">
+          <div class="col-sm-3 ms-5">
             <div class="card m-3" style="width: 18rem;">
               {% if room.rimage %}
                 <img class="card-img-top" src="{{ room.rimage.url }}" alt="Card image cap">
@@ -137,6 +140,7 @@
           </div>
         {% endfor %}
       </div>
+      {% endif %}
     </div>
   {% endif %}
 {% endblock %}
