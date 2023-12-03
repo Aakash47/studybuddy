@@ -10,7 +10,7 @@
   </form>
     <div class="row">
       {% for room in rooms %}
-        <div class="col-sm-3">
+        <div class="col-sm-3 ms-5">
           <div class="card m-3" style="width: 18rem;">
             {% if room.rimage %}
               <img class="card-img-top" src="{{ room.rimage.url }}" alt="Card image cap">
@@ -20,16 +20,16 @@
             <div class="card-body">
               <h5 class="card-title">{{ room.rname }}</h5>
               <p class="card-text">
-                <strong>admin:</strong> 
+                <strong>Admin:</strong> 
                 {% if request.user == room.rcreated_by %}
                  You,
                  {% else %}
                 {{ room.rcreated_by }},
                 {% endif %}
-                <strong>course:</strong>
-                {{ room.rcourse.all.0 }}, {{room.rcourse.all.1}} ...
+                <strong>Course:</strong>
+                {{ room.rcourse.all.0 }}...
               </p>
-              <p class="card-text"><Strong>college: </Strong>{{ room.rcollege.all.0 }}, {{room.rcollege.all.1}} ...</p>
+              <p class="card-text"><Strong>College: </Strong>{{ room.rcollege.all.0 }}...</p>
               <p class="card-text">{{ room.rdescription }}</p>
               {% if request.user in room.ruser.all %}
               <a href="{% url 'chat' room.rslug %}" class="btn btn-primary">Chat</a>
